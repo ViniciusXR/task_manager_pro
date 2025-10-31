@@ -21,7 +21,7 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 5,  // ATUALIZADO: descrição agora é opcional
+      version: 6,  // ATUALIZADO: múltiplas fotos
       onCreate: _createDB,
       onUpgrade: _onUpgrade,
     );
@@ -40,7 +40,7 @@ class DatabaseService {
         priority $textType,
         completed $intType,
         createdAt $textType,
-        photoPath TEXT,
+        photoPaths TEXT,
         completedAt TEXT,
         completedBy TEXT,
         latitude REAL,
@@ -66,7 +66,6 @@ class DatabaseService {
     }
     if (oldVersion < 5) {
       // Recriar tabela para permitir description opcional
-      // 1. Criar tabela temporária com estrutura nova
       await db.execute('''
         CREATE TABLE tasks_new (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -84,7 +83,6 @@ class DatabaseService {
         )
       ''');
       
-      // 2. Copiar dados da tabela antiga para a nova
       await db.execute('''
         INSERT INTO tasks_new 
         SELECT id, title, description, priority, completed, createdAt,
@@ -92,13 +90,23 @@ class DatabaseService {
         FROM tasks
       ''');
       
-      // 3. Deletar tabela antiga
       await db.execute('DROP TABLE tasks');
-      
-      // 4. Renomear tabela nova
       await db.execute('ALTER TABLE tasks_new RENAME TO tasks');
       
       print('✅ Tabela recriada - description agora é opcional');
+    }
+    if (oldVersion < 6) {
+      // Migrar de photoPath (único) para photoPaths (múltiplos)
+      await db.execute('ALTER TABLE tasks ADD COLUMN photoPaths TEXT');
+      
+      // Copiar photoPath antigo para photoPaths
+      await db.execute('''
+        UPDATE tasks 
+        SET photoPaths = photoPath 
+        WHERE photoPath IS NOT NULL AND photoPath != ''
+      ''');
+      
+      print('✅ Migração v6 - suporte a múltiplas fotos adicionado');
     }
     print('✅ Banco migrado de v$oldVersion para v$newVersion');
   }

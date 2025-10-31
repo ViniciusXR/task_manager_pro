@@ -170,8 +170,8 @@ class TaskCard extends StatelessWidget {
                               ),
                             ),
                             
-                            // Foto
-                            if (task.hasPhoto)
+                            // Fotos
+                            if (task.hasPhotos)
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
@@ -184,18 +184,18 @@ class TaskCard extends StatelessWidget {
                                     color: Colors.blue.withOpacity(0.5),
                                   ),
                                 ),
-                                child: const Row(
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(
-                                      Icons.photo_camera,
+                                    const Icon(
+                                      Icons.photo_library,
                                       size: 14,
                                       color: Colors.blue,
                                     ),
-                                    SizedBox(width: 4),
+                                    const SizedBox(width: 4),
                                     Text(
-                                      'Foto',
-                                      style: TextStyle(
+                                      '${task.photosCount}',
+                                      style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500,
                                         color: Colors.blue,
@@ -290,43 +290,87 @@ class TaskCard extends StatelessWidget {
               ),
             ),
             
-            // PREVIEW DA FOTO
-            if (task.hasPhoto)
+            // PREVIEW DAS FOTOS (mosttrar primeira foto ou grid)
+            if (task.hasPhotos)
               ClipRRect(
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(12),
                   bottomRight: Radius.circular(12),
                 ),
-                child: Image.file(
-                  File(task.photoPath!),
-                  width: double.infinity,
-                  height: 180,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      height: 180,
-                      color: Colors.grey[200],
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.broken_image_outlined,
-                            size: 48,
-                            color: Colors.grey[400],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Foto não encontrada',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 14,
+                child: task.photosCount == 1
+                    ? Image.file(
+                        File(task.photoPaths.first),
+                        width: double.infinity,
+                        height: 180,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            height: 180,
+                            color: Colors.grey[200],
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.broken_image_outlined,
+                                  size: 48,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Foto não encontrada',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
                             ),
+                          );
+                        },
+                      )
+                    : SizedBox(
+                        height: 180,
+                        child: GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 2,
+                            crossAxisSpacing: 2,
                           ),
-                        ],
+                          itemCount: task.photosCount > 4 ? 4 : task.photosCount,
+                          itemBuilder: (context, index) {
+                            if (index == 3 && task.photosCount > 4) {
+                              // Overlay mostrando quantas fotos a mais existem
+                              return Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  Image.file(
+                                    File(task.photoPaths[index]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  Container(
+                                    color: Colors.black.withOpacity(0.7),
+                                    child: Center(
+                                      child: Text(
+                                        '+${task.photosCount - 3}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                            return Image.file(
+                              File(task.photoPaths[index]),
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
                       ),
-                    );
-                  },
-                ),
               ),
           ],
         ),

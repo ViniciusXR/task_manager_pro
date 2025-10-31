@@ -6,8 +6,8 @@ class Task {
   final bool completed;
   final DateTime createdAt;
   
-  // CÂMERA
-  final String? photoPath;
+  // MÚLTIPLAS FOTOS
+  final List<String> photoPaths;  // Lista de caminhos das fotos
   
   // SENSORES
   final DateTime? completedAt;
@@ -25,16 +25,18 @@ class Task {
     required this.priority,
     this.completed = false,
     DateTime? createdAt,
-    this.photoPath,
+    List<String>? photoPaths,  // Agora aceita lista de fotos
     this.completedAt,
     this.completedBy,
     this.latitude,
     this.longitude,
     this.locationName,
-  }) : createdAt = createdAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       photoPaths = photoPaths ?? [];  // Lista vazia por padrão
 
   // Getters auxiliares
-  bool get hasPhoto => photoPath != null && photoPath!.isNotEmpty;
+  bool get hasPhotos => photoPaths.isNotEmpty;
+  int get photosCount => photoPaths.length;
   bool get hasLocation => latitude != null && longitude != null;
   bool get wasCompletedByShake => completedBy == 'shake';
 
@@ -46,7 +48,7 @@ class Task {
       'priority': priority,
       'completed': completed ? 1 : 0,
       'createdAt': createdAt.toIso8601String(),
-      'photoPath': photoPath,
+      'photoPaths': photoPaths.join('|'),  // Salvar como string separada por |
       'completedAt': completedAt?.toIso8601String(),
       'completedBy': completedBy,
       'latitude': latitude,
@@ -56,14 +58,20 @@ class Task {
   }
 
   factory Task.fromMap(Map<String, dynamic> map) {
+    // Converter string separada por | de volta para lista
+    final photoPathsString = map['photoPaths'] as String?;
+    final photoPaths = photoPathsString != null && photoPathsString.isNotEmpty
+        ? photoPathsString.split('|')
+        : <String>[];
+
     return Task(
       id: map['id'] as int?,
       title: map['title'] as String,
-      description: (map['description'] as String?) ?? '',  // Usar string vazia se for null
+      description: (map['description'] as String?) ?? '',
       priority: map['priority'] as String,
       completed: (map['completed'] as int) == 1,
       createdAt: DateTime.parse(map['createdAt'] as String),
-      photoPath: map['photoPath'] as String?,
+      photoPaths: photoPaths,
       completedAt: map['completedAt'] != null 
           ? DateTime.parse(map['completedAt'] as String)
           : null,
@@ -81,7 +89,7 @@ class Task {
     String? priority,
     bool? completed,
     DateTime? createdAt,
-    String? photoPath,
+    List<String>? photoPaths,  // Agora recebe lista
     DateTime? completedAt,
     String? completedBy,
     double? latitude,
@@ -95,7 +103,7 @@ class Task {
       priority: priority ?? this.priority,
       completed: completed ?? this.completed,
       createdAt: createdAt ?? this.createdAt,
-      photoPath: photoPath ?? this.photoPath,
+      photoPaths: photoPaths ?? this.photoPaths,
       completedAt: completedAt ?? this.completedAt,
       completedBy: completedBy ?? this.completedBy,
       latitude: latitude ?? this.latitude,

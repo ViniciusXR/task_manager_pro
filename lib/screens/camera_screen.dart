@@ -16,6 +16,7 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   bool _isCapturing = false;
+  bool _isDisposed = false;
 
   @override
   void initState() {
@@ -23,13 +24,19 @@ class _CameraScreenState extends State<CameraScreen> {
     
     if (!widget.controller.value.isInitialized) {
       widget.controller.initialize().then((_) {
-        if (mounted) setState(() {});
+        if (mounted && !_isDisposed) setState(() {});
       });
     }
   }
 
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   Future<void> _takePicture() async {
-    if (_isCapturing || !widget.controller.value.isInitialized) return;
+    if (_isCapturing || !widget.controller.value.isInitialized || _isDisposed) return;
 
     setState(() => _isCapturing = true);
 
@@ -37,24 +44,24 @@ class _CameraScreenState extends State<CameraScreen> {
       final image = await widget.controller.takePicture();
       final savedPath = await CameraService.instance.savePicture(image);
       
-      if (mounted) {
+      if (mounted && !_isDisposed) {
         Navigator.pop(context, savedPath);
       }
     } catch (e) {
       print('❌ Erro ao capturar: $e');
-      if (mounted) {
+      if (mounted && !_isDisposed) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
         );
       }
     } finally {
-      if (mounted) setState(() => _isCapturing = false);
+      if (mounted && !_isDisposed) setState(() => _isCapturing = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.controller.value.isInitialized) {
+    if (_isDisposed || !widget.controller.value.isInitialized) {
       return const Scaffold(
         backgroundColor: Colors.black,
         body: Center(

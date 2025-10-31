@@ -44,7 +44,10 @@ class CameraService {
     try {
       await controller.initialize();
 
-      if (!context.mounted) return null;
+      if (!context.mounted) {
+        controller.dispose();
+        return null;
+      }
       
       final imagePath = await Navigator.push<String>(
         context,
@@ -54,9 +57,15 @@ class CameraService {
         ),
       );
 
+      // Descartar controller APÓS o Navigator retornar
+      controller.dispose();
+      
       return imagePath;
     } catch (e) {
       print('❌ Erro ao abrir câmera: $e');
+      
+      // Descartar controller em caso de erro
+      controller.dispose();
       
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -68,8 +77,6 @@ class CameraService {
       }
       
       return null;
-    } finally {
-      controller.dispose();
     }
   }
 

@@ -21,7 +21,7 @@ class Task {
   Task({
     this.id,
     required this.title,
-    required this.description,
+    this.description = '',  // Valor padrão vazio
     required this.priority,
     this.completed = false,
     DateTime? createdAt,
@@ -59,7 +59,7 @@ class Task {
     return Task(
       id: map['id'] as int?,
       title: map['title'] as String,
-      description: map['description'] as String,
+      description: (map['description'] as String?) ?? '',  // Usar string vazia se for null
       priority: map['priority'] as String,
       completed: (map['completed'] as int) == 1,
       createdAt: DateTime.parse(map['createdAt'] as String),

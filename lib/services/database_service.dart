@@ -21,7 +21,7 @@ class DatabaseService {
 
     return await openDatabase(
       path,
-      version: 4,  // VERSÃO FINAL COM TODOS OS CAMPOS
+      version: 5,  // ATUALIZADO: descrição agora é opcional
       onCreate: _createDB,
       onUpgrade: _onUpgrade,
     );
@@ -36,7 +36,7 @@ class DatabaseService {
       CREATE TABLE tasks (
         id $idType,
         title $textType,
-        description $textType,
+        description TEXT,
         priority $textType,
         completed $intType,
         createdAt $textType,
@@ -63,6 +63,42 @@ class DatabaseService {
       await db.execute('ALTER TABLE tasks ADD COLUMN latitude REAL');
       await db.execute('ALTER TABLE tasks ADD COLUMN longitude REAL');
       await db.execute('ALTER TABLE tasks ADD COLUMN locationName TEXT');
+    }
+    if (oldVersion < 5) {
+      // Recriar tabela para permitir description opcional
+      // 1. Criar tabela temporária com estrutura nova
+      await db.execute('''
+        CREATE TABLE tasks_new (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title TEXT NOT NULL,
+          description TEXT,
+          priority TEXT NOT NULL,
+          completed INTEGER NOT NULL,
+          createdAt TEXT NOT NULL,
+          photoPath TEXT,
+          completedAt TEXT,
+          completedBy TEXT,
+          latitude REAL,
+          longitude REAL,
+          locationName TEXT
+        )
+      ''');
+      
+      // 2. Copiar dados da tabela antiga para a nova
+      await db.execute('''
+        INSERT INTO tasks_new 
+        SELECT id, title, description, priority, completed, createdAt,
+               photoPath, completedAt, completedBy, latitude, longitude, locationName
+        FROM tasks
+      ''');
+      
+      // 3. Deletar tabela antiga
+      await db.execute('DROP TABLE tasks');
+      
+      // 4. Renomear tabela nova
+      await db.execute('ALTER TABLE tasks_new RENAME TO tasks');
+      
+      print('✅ Tabela recriada - description agora é opcional');
     }
     print('✅ Banco migrado de v$oldVersion para v$newVersion');
   }

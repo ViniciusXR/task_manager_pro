@@ -100,18 +100,22 @@ lib/
 
 ## 📸 Screenshots
 
-*As screenshots serão adicionadas em breve...*
+<img width="1280" height="2856" alt="Screenshot_1762035953" src="https://github.com/user-attachments/assets/d6ac63e8-5c5c-4663-8360-eeacd670e332" />
 
-<!-- Espaço reservado para screenshots das funcionalidades:
-- Tela inicial com lista de tarefas
-- Formulário de criação/edição de tarefa
-- Galeria de fotos (múltiplas fotos)
-- Seleção de foto da galeria
-- Visualização de foto em tela cheia
-- Card de tarefa com múltiplas fotos
-- Detalhes de tarefa com localização
-- Sensor de shake em ação
--->
+**Imagem 1 - Mostrando as diferentes formas de adicionar imagens**
+
+<img width="1280" height="2856" alt="Screenshot_1762036047" src="https://github.com/user-attachments/assets/70aa012c-ed7e-44cb-a9dc-46c4fe7fb4a4" />
+
+**Imagem 2 - Demonstrando a funcionalidade de adicionar várias fotos por tarefa com imagens da galeria**
+
+<img width="1280" height="2856" alt="Screenshot_1762036108" src="https://github.com/user-attachments/assets/8eacffc3-2c55-4a74-865c-34da91641be4" />
+
+**Imagem 3 - Exibindo a home com as tarefas com multiplas imagens adicionadas**
+
+<img width="1280" height="2856" alt="Screenshot_1762036159" src="https://github.com/user-attachments/assets/1398a662-f823-49dd-80d1-639d9bc74f8d" />
+
+**Imagem 4 - Edição da tarefa com possibilidade de adicionar mais imagens**
+
 
 ---
 

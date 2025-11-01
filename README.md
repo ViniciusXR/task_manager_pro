@@ -96,10 +96,6 @@ lib/
 
 **Mapa não aparece**: Verifique se você configurou a API Key do Google Maps corretamente.
 
-## 📝 Licença
-
-MIT License - veja [LICENSE](LICENSE) para mais detalhes.
-
 ---
 
 ## 📸 Screenshots
@@ -231,6 +227,12 @@ flutter pub upgrade image_picker
 ```
 
 **Imagens não sendo adicionadas**: Certifique-se de que o modal está retornando o resultado corretamente. O problema foi corrigido removendo `Navigator.pop()` duplicados no `CameraService`.
+
+---
+
+## 📝 Licença
+
+MIT License - veja [LICENSE](LICENSE) para mais detalhes.
 
 ---
 

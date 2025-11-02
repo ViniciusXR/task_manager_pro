@@ -2,6 +2,31 @@
 
 Implementação em Flutter de um gerenciador de tarefas completo utilizando Material Design 3, sensores do dispositivo, câmera, GPS e mapas interativos.
 
+---
+
+## 📑 Índice
+
+- [✨ Funcionalidades](#-funcionalidades)
+  - [📝 Gerenciamento de Tarefas](#-gerenciamento-de-tarefas)
+  - [📷 Câmera e Galeria](#-câmera-e-galeria-funcionalidade-1-galeria-de-fotos)
+  - [📍 GPS e Localização](#-gps-e-localização)
+  - [📳 Sensores](#-sensores)
+  - [🎨 Interface](#-interface)
+- [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+- [🚀 Como Executar](#-como-executar)
+- [📊 Estrutura do Projeto](#-estrutura-do-projeto)
+- [📱 Permissões Necessárias](#-permissões-necessárias)
+- [📸 Screenshots](#-screenshots)
+- [🎯 Funcionalidades Desenvolvidas - Laboratório 3](#-funcionalidades-desenvolvidas---laboratório-3)
+  - [1️⃣ Galeria de Fotos](#1️⃣-galeria-de-fotos)
+  - [4️⃣ Múltiplas Fotos](#4️⃣-múltiplas-fotos)
+- [🔧 Detalhes Técnicos](#-detalhes-técnicos)
+- [🐛 Solução de Problemas](#-solução-de-problemas)
+- [📝 Licença](#-licença)
+- [👨‍💻 Desenvolvido por](#-desenvolvido-por)
+
+---
+
 ## ✨ Funcionalidades
 
 ### 📝 Gerenciamento de Tarefas

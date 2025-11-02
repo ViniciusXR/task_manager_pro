@@ -141,6 +141,11 @@ lib/
 
 **Imagem 4 - Edição da tarefa com possibilidade de adicionar mais imagens**
 
+<img width="1280" height="2856" alt="Screenshot_1762107650" src="https://github.com/user-attachments/assets/b41ff42e-a762-470b-a73a-5d116eb283cd" />
+
+**Imagem 5 - Demonstrando a possibilidade de adicionar imagens da câmera e da galeria simultaneamente**
+
+
 
 ---
 
